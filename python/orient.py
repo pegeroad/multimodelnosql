@@ -44,14 +44,14 @@ class orient_dao(multi_model_dao):
             """
         return self.client.query(query)
 
-    def get_leaves(self):
+    def get_leaves(self, vertex_collection, edge_collection):
         query = """
-            SELECT * from (SELECT _key, bothE("Relation").size() AS friendCount FROM Profile) where friendCount<=1
+            SELECT * from (SELECT _key, bothE('""" + edge_collection + """').size() AS friendCount FROM """ + vertex_collection + """) where friendCount<=1
             """
         return self.client.query(query)
 
 def main():
-    orient = orient_dao("plocal:pokec", "52.169.8.166")
+    orient = orient_dao("plocal:pokec", "??")
     #shortestPath = orient.get_shortest_path('P7', 'P318', 'Profile')
 
     #print shortestPath[0]

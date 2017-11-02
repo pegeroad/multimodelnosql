@@ -2,6 +2,7 @@ import abc
 
 
 class multi_model_dao(object):
+
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
@@ -60,5 +61,21 @@ class multi_model_dao(object):
 
         Returns:
             document: the grouped statistic of the profiles.
+        """
+        return
+
+    @abc.abstractmethod
+    def get_leaves(self, vertex_collection, edge_collection):
+        """
+        Returns the leaf nodes of a graph identified by its vertex
+        and edge collection.
+
+        Args:
+            vertex_collection (str): The name of the collection
+             of the nodes.
+            edge_collection (str): The name of the collection
+             of the edges.
+        Returns:
+            document: list of leaf nodes.
         """
         return

@@ -1,6 +1,6 @@
 from pyArango.connection import *
 from profilehooks import timecall
-import multi_model_dao
+from multi_model_dao import *
 
 
 
@@ -71,17 +71,15 @@ class arango_dao(multi_model_dao):
         """
         return self.db.AQLQuery(aql)
 
+    def get_leaves(self, vertex_collection, edge_collection):
 
-    def get_leaves_in_graph(self, graph_name):
-        bind = {
-            "graphName": graph_name
-        }
         aql = """
-        FOR v IN 0..10 INBOUND "worldVertices/world" GRAPH @graphName
-            FILTER LENGTH(FOR vv IN INBOUND v GRAPH @graphName LIMIT 1 RETURN 1) == 0
-        RETURN CONCAT(v.name, " (", v.type, ")")
+        FOR prof IN """ + vertex_collection + """
+            FILTER LENGTH(FOR e IN OUTBOUND prof """ + edge_collection + """ RETURN 1) == 0 &&
+            LENGTH(FOR e IN INBOUND prof """ + edge_collection + """ RETURN 1) >= 1
+        RETURN prof
         """
-        return self.db.AQLQuery(aql, bindVars=bind)
+        return self.db.AQLQuery(aql)
 
 def main():
     arango = arango_dao("http://???:8529", "_system", "??", "??")
@@ -90,17 +88,18 @@ def main():
 
     print db
 
-    profiles = arango.get_collection("profiles")
+    #profiles = arango.get_collection("profiles")
     # relations = arango.get_collection("relations")
 
     # neighbors = arango.get_neighbors_for_node('profiles/P19', "pokec")
-    shortest_path = arango.get_shortest_path('profiles/P25', 'profiles/P163', 'pokec')
+    #shortest_path = arango.get_shortest_path('profiles/P25', 'profiles/P163', 'pokec')
     # distance = arango.get_distance('profiles/P25', 'profiles/P163', 'pokec')
     # P244241
 
     # print neighbors
-    print arango.get_age_group_statistic("profiles")
+    #print arango.get_age_group_statistic("profiles")
 
+    print arango.get_leaves("profiles", "relations")
 
 if __name__ == "__main__":
     main()
