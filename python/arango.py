@@ -3,8 +3,7 @@ from profilehooks import timecall
 from multi_model_dao import *
 
 
-
-class arango_dao(multi_model_dao):
+class ArangoDao(multi_model_dao):
 
     def __init__(self, url, db_name, username, password):
         conn = Connection(arangoURL=url, username=username, password=password)
@@ -82,7 +81,7 @@ class arango_dao(multi_model_dao):
         return self.db.AQLQuery(aql)
 
 def main():
-    arango = arango_dao("http://???:8529", "_system", "??", "??")
+    arango = ArangoDao("http://???:8529", "_system", "??", "??")
     print arango
     db = arango.db
 

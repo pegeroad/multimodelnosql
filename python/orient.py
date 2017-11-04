@@ -2,7 +2,7 @@ import pyorient
 from multi_model_dao import *
 
 
-class orient_dao(multi_model_dao):
+class OrientDao(multi_model_dao):
 
     def __init__(self, db_name, hostname, port=2424, username="root", password="root"):
         self.client = pyorient.OrientDB(hostname, port)
@@ -51,7 +51,7 @@ class orient_dao(multi_model_dao):
         return self.client.query(query)
 
 def main():
-    orient = orient_dao("plocal:pokec", "??")
+    orient = OrientDao("plocal:pokec", "??")
     #shortestPath = orient.get_shortest_path('P7', 'P318', 'Profile')
 
     #print shortestPath[0]
