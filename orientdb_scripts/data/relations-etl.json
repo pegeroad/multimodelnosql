@@ -1,0 +1,40 @@
+{
+  "config": {
+    "parallel": false
+  },
+  "source": { "file": { "path": "/orientdb/data/soc-pokec-relationships-orientdb.txt" } },
+  "extractor": { "row": {} },
+  "transformers": [
+    { "csv": { "separator": "\t", "stringCharacter": "", "unicode": false } },
+    { "merge": { "joinFieldName":"_from", "lookup":"Profile._key", "unresolvedLinkAction": "ERROR" } },
+    { "vertex": { "class": "Profile"} },
+    { "edge": {
+        "class": "Relation",
+        "joinFieldName": "_to",
+        "lookup": "Profile._key",
+        "unresolvedLinkAction": "ERROR"
+      }
+    },
+  ],
+  "loader": {
+    "orientdb": {
+       "dbURL": "plocal:/orientdb/databases/pokec",
+       "dbType": "graph",
+       "serverUser": "root",
+       "serverPassword": "@RootPassword",
+       "wal": false,
+       "batchCommit": 100,
+       "tx": true,
+       "txUseLog": false,
+       "dbAutoCreateProperties": true,
+       "classes": [
+         {"name": "Profile", "extends": "V", "clusters": 1},
+         {"name": "Relation", "extends": "E"}
+       ], "indexes": [
+         {"class":"Profile", "fields":["_key:string"], "type":"UNIQUE_HASH_INDEX" }
+       ],
+       "settings": {
+       }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "config": {
+    "parallel": false,
+    "verbose": true
+  },
+  "source": { "file": { "path": "/orientdb/data/soc-pokec-profiles-orientdb.txt" } },
+  "extractor": { "row": {} },
+  "transformers": [
+    { "csv": { "separator": "\t", "stringCharacter": "", "unicode": false } },
+    { "vertex": { "class": "Profile" } }
+  ],
+  "loader": {
+    "orientdb": {
+       "dbURL": "plocal:/orientdb/databases/pokec",
+       "serverUser": "root",
+       "serverPassword": "@RootPassword",
+       "dbType": "graph",
+       "dbAutoDropIfExists": true,
+       "dbAutoCreate": true,
+       "wal": false,
+       "useLightweightEdges" : true,
+       "dbAutoCreateProperties": true,
+       "classes": [
+         {"name": "Profile", "extends": "V", "clusters": 1},
+         {"name": "Relation", "extends": "E"}
+       ], "indexes": [
+         {"class":"Profile", "fields":["_key:string"], "type":"UNIQUE_HASH_INDEX" }
+       ],
+       "settings": {
+       }
+    }
+  }
+}
