@@ -1,5 +1,5 @@
+from dao.arango import *
 from experiments.abstract_experiment import *
-from arango import *
 
 
 class ColdArangoExperiment(AbstractExperiment):
@@ -10,6 +10,7 @@ class ColdArangoExperiment(AbstractExperiment):
 
     def do_experiment(self, reports={}):
         reports[self.name] = {}
+        self.validate_number_of_data()
         self.neighbor_test(reports, self.iterations)
         self.leaf_test(reports, self.iterations)
         self.statistic_test(reports, self.iterations)
@@ -31,9 +32,9 @@ class ColdArangoExperiment(AbstractExperiment):
     def shortest_path_test(self, reports, iterations):
         experiment_name = "get_shortest_path"
         self.experiment_wrapper(reports, iterations, experiment_name,
-                                self.dao.get_shortest_path, 'profiles/P25', 'profiles/P163', 'pokec')
+                                self.dao.get_shortest_path, 'profiles/P1554217', 'profiles/P891887', 'pokec')
 
     def distance_test(self, reports, iterations):
         experiment_name = "get_distance"
         self.experiment_wrapper(reports, iterations, experiment_name,
-                                self.dao.get_distance, 'profiles/P25', 'profiles/P163', 'pokec')
+                                self.dao.get_distance, 'profiles/P1554217', 'profiles/P891887', 'pokec')

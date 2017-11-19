@@ -1,9 +1,9 @@
 from gremlin_python.driver.client import Client
 from profilehooks import timecall
-from multi_model_dao import *
+from multimodeldao import *
 
 
-class CosmosDao(multi_model_dao):
+class CosmosDao(MultiModelDao):
     def __init__(self, url, db_name, graph_name, key):
         import sys
         reload(sys)
@@ -49,6 +49,11 @@ class CosmosDao(multi_model_dao):
         return self.client.submit("g.V().hasLabel('" + str(vertex_label)
                                   + "').where(outE().count().is(eq(0))).where(inE().count().is(gt(1)))").all().result()
 
+    def get_edge_count(self):
+        return
+
+    def get_node_count(self):
+        return
 
 def main():
     uri = 'wss://<app_id>.graphs.azure.com:443/'

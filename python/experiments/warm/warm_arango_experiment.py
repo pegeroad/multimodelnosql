@@ -1,4 +1,4 @@
-from arango import *
+from dao.arango import *
 from experiments.cold.cold_arango_experiment import ColdArangoExperiment
 
 
@@ -10,6 +10,7 @@ class WarmArangoExperiment(ColdArangoExperiment):
 
     def do_experiment(self, reports={}):
         reports[self.name] = {}
+        self.validate_number_of_data()
         self.neighbor_test(reports, 1)
         self.neighbor_test(reports, self.iterations)
         self.leaf_test(reports, 1)

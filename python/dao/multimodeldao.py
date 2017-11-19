@@ -1,11 +1,12 @@
 import abc
+from profilehooks import timecall
 
 
-class multi_model_dao(object):
-
+class MultiModelDao(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
+    @timecall(immediate=True)
     def get_neighbors_for_node(self, node_key, graph_name):
         """
         Returns the neighbors of a specific node.
@@ -20,6 +21,7 @@ class multi_model_dao(object):
         return
 
     @abc.abstractmethod
+    @timecall(immediate=True)
     def get_shortest_path(self, node_a, node_b, graph_name):
         """
         Returns the shortest path between two nodes.
@@ -36,6 +38,7 @@ class multi_model_dao(object):
         return
 
     @abc.abstractmethod
+    @timecall(immediate=True)
     def get_distance(self, node_a, node_b, graph_name):
         """
         Returns the distance between the two nodes..
@@ -51,6 +54,7 @@ class multi_model_dao(object):
         return
 
     @abc.abstractmethod
+    @timecall(immediate=True)
     def get_age_group_statistic(self, collection_name):
         """
         Groups the profiles according to 5 years and gender.
@@ -65,6 +69,7 @@ class multi_model_dao(object):
         return
 
     @abc.abstractmethod
+    @timecall(immediate=True)
     def get_leaves(self, vertex_collection, edge_collection):
         """
         Returns the leaf nodes of a graph identified by its vertex
@@ -77,5 +82,27 @@ class multi_model_dao(object):
              of the edges.
         Returns:
             document: list of leaf nodes.
+        """
+        return
+
+    @abc.abstractmethod
+    @timecall(immediate=True)
+    def get_edge_count(self):
+        """
+        Returns the number of edges.
+
+        Returns:
+            int: number of edges.
+        """
+        return
+
+    @abc.abstractmethod
+    @timecall(immediate=True)
+    def get_node_count(self):
+        """
+        Returns the number of nodes.
+
+        Returns:
+            int: number of nodes.
         """
         return

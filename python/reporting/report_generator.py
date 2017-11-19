@@ -3,8 +3,9 @@ from statistics import Statistics
 
 class ReportGenerator(object):
 
-    def __init__(self, reports={}):
+    def __init__(self, result_path, reports={}):
         self.reports = reports
+        self.result_path = result_path
 
     def get_running_time_list_from_report(self, db_experiment_name, experiment_name):
         return self.reports[db_experiment_name][experiment_name]['running_times']
@@ -27,3 +28,8 @@ class ReportGenerator(object):
                 self.reports[ok][ik]['min'] = min
                 self.reports[ok][ik]['max'] = max
                 self.reports[ok][ik]['excluded_by_confidence_intervall'] = filtered_list
+
+    def save_report_as_json_file(self):
+        import json
+        with open(self.result_path, 'w') as fp:
+            json.dump(self.reports, fp)

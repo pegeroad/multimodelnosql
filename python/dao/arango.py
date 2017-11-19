@@ -1,21 +1,23 @@
 from pyArango.connection import *
-from profilehooks import timecall
-from multi_model_dao import *
+from multimodeldao import *
 
 
-class ArangoDao(multi_model_dao):
+class ArangoDao(MultiModelDao):
 
     def __init__(self, url, db_name, username, password):
         conn = Connection(arangoURL=url, username=username, password=password)
         self.db = conn[db_name]
 
+    @timecall(immediate=True)
     def get_neighbors_for_node(self, node_key, graph_name):
         aql = "FOR vertex IN OUTBOUND '" + node_key + "' GRAPH '" + graph_name + "' RETURN vertex"
         return self.db.AQLQuery(aql)
 
+    @timecall(immediate=True)
     def get_collection(self, collection_name):
         return self.db.collections[collection_name]
 
+    @timecall(immediate=True)
     def get_shortest_path(self, node_a, node_b, graph_name):
         bind = {
             "startId": node_a,
@@ -36,6 +38,7 @@ class ArangoDao(multi_model_dao):
                 """
         return self.db.AQLQuery(aql, bindVars=bind)
 
+    @timecall(immediate=True)
     def get_distance(self, node_a, node_b, graph_name):
         bind = {
             "startId": node_a,
@@ -56,6 +59,7 @@ class ArangoDao(multi_model_dao):
                 """
         return self.db.AQLQuery(aql, bindVars=bind)
 
+    @timecall(immediate=True)
     def get_age_group_statistic(self, collection_name):
         aql = """
             FOR p IN """ + collection_name + """
@@ -70,6 +74,7 @@ class ArangoDao(multi_model_dao):
         """
         return self.db.AQLQuery(aql)
 
+    @timecall(immediate=True)
     def get_leaves(self, vertex_collection, edge_collection):
 
         aql = """
@@ -80,25 +85,20 @@ class ArangoDao(multi_model_dao):
         """
         return self.db.AQLQuery(aql)
 
-def main():
-    arango = ArangoDao("http://???:8529", "_system", "??", "??")
-    print arango
-    db = arango.db
+    @timecall(immediate=True)
+    def get_edge_count(self):
+        aql = """
+            FOR doc IN relations
+                COLLECT WITH COUNT INTO length
+            RETURN length
+        """
+        return self.db.AQLQuery(aql).response['result'][0]
 
-    print db
-
-    #profiles = arango.get_collection("profiles")
-    # relations = arango.get_collection("relations")
-
-    # neighbors = arango.get_neighbors_for_node('profiles/P19', "pokec")
-    #shortest_path = arango.get_shortest_path('profiles/P25', 'profiles/P163', 'pokec')
-    # distance = arango.get_distance('profiles/P25', 'profiles/P163', 'pokec')
-    # P244241
-
-    # print neighbors
-    #print arango.get_age_group_statistic("profiles")
-
-    print arango.get_leaves("profiles", "relations")
-
-if __name__ == "__main__":
-    main()
+    @timecall(immediate=True)
+    def get_node_count(self):
+        aql = """
+            FOR doc IN profiles
+                COLLECT WITH COUNT INTO length
+            RETURN length
+        """
+        return self.db.AQLQuery(aql).response['result'][0]
