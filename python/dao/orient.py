@@ -64,3 +64,8 @@ class OrientDao(MultiModelDao):
     def get_node_count(self):
         query = "select count(*) from Profile"
         return self.client.query(query)[0].oRecordData['count']
+
+    @timecall(immediate=True)
+    def decrease_not_provided_age(self):
+        query = "update Profile INCREMENT AGE=-1 WHERE AGE<=0"
+        return self.client.query(query)

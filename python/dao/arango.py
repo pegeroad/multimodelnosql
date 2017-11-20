@@ -79,8 +79,7 @@ class ArangoDao(MultiModelDao):
 
         aql = """
         FOR prof IN """ + vertex_collection + """
-            FILTER LENGTH(FOR e IN OUTBOUND prof """ + edge_collection + """ RETURN 1) == 0 &&
-            LENGTH(FOR e IN INBOUND prof """ + edge_collection + """ RETURN 1) >= 1
+            FILTER LENGTH(FOR e IN OUTBOUND prof """ + edge_collection + """ RETURN 1) == 1 
         RETURN prof
         """
         return self.db.AQLQuery(aql)
@@ -102,3 +101,12 @@ class ArangoDao(MultiModelDao):
             RETURN length
         """
         return self.db.AQLQuery(aql).response['result'][0]
+
+    @timecall(immediate=True)
+    def decrease_not_provided_age(self):
+        aql = """
+            FOR p IN profiles
+                FILTER p.AGE <= 0
+                UPDATE p WITH { AGE: p.AGE - 1 } IN profiles
+        """
+        self.db.AQLQuery(aql)

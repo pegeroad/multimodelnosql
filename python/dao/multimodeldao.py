@@ -106,3 +106,11 @@ class MultiModelDao(object):
             int: number of nodes.
         """
         return
+
+    @abc.abstractmethod
+    @timecall(immediate=True)
+    def decrease_not_provided_age(self):
+        """
+        Decreases the AGE less than 0 by 1.
+        """
+        return

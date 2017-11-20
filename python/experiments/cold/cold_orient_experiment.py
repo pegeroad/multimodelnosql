@@ -3,6 +3,7 @@ from experiments.abstract_experiment import *
 
 
 class ColdOrientExperiment(AbstractExperiment):
+
     def __init__(self, experiment_name, iterations, orient_dao=OrientDao):
         self.name = experiment_name
         self.dao = orient_dao
@@ -16,6 +17,7 @@ class ColdOrientExperiment(AbstractExperiment):
         self.statistic_test(reports, self.iterations)
         self.shortest_path_test(reports, self.iterations)
         self.distance_test(reports, self.iterations)
+        self.update_test(reports, self.iterations)
 
     def neighbor_test(self, reports, iterations):
         experiment_name = 'get_neighbors'
@@ -38,3 +40,8 @@ class ColdOrientExperiment(AbstractExperiment):
         experiment_name = "get_distance"
         self.experiment_wrapper(reports, iterations, experiment_name,
                                 self.dao.get_distance, 'P1554217', 'P891887', 'Profile')
+
+    def update_test(self, reports, iterations):
+        experiment_name = "update_age_test"
+        self.experiment_wrapper(reports, iterations, experiment_name,
+                                self.dao.decrease_not_provided_age)
